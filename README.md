@@ -5,7 +5,7 @@ Run the following two commands to install on a fresh Void Linux tty:
 
 ```bash
 sudo xbps-install -Sy curl
-curl -s https://raw.githubusercontent.com/Catskinner6/void/void.sh | sh
+curl -s https://raw.githubusercontent.com/Catskinner6/void/main/void.sh | sh
 ```
 
 Enjoy.
