@@ -19,10 +19,13 @@ echo "Script running for user: $USERNAME"
 sudo xbps-install -Syu
 
 # Install needed packages
-sudo xbps-install -Sy base-devel wget xtools neovim mesa-dri stow wl-clipboard
+sudo xbps-install -Sy base-devel git wget xtools neovim mesa-dri stow wl-clipboard
 sudo xbps-install -Sy dunst dbus elogind seatd cups cronie polkit
 sudo xbps-install -Sy fastfetch alacritty foot Thunar Waybar wofi rofi nerd-fonts
 sudo xbps-install -Sy zig go rust fzf zoxide starship
+
+# Install void Repo
+git clone https://github.com/Catskinner6/void.git
 
 # Backup .bashrc if it exists
 if [ -f ~/.bashrc ]; then
