@@ -57,9 +57,9 @@ cd ../void-packages/
 ./xbps-src pkg xdg-desktop-portal-hyprland
 ./xbps-src pkg hyprland-protocols
 
-sudo xbps-install -R hostdir/binpkgs hyprland
-sudo xbps-install -R hostdir/binpkgs xdg-desktop-portal-hyprland
-sudo xbps-install -R hostdir/binpkgs hyprland-protocols
+sudo xbps-install -Ry hostdir/binpkgs hyprland
+sudo xbps-install -Ry hostdir/binpkgs xdg-desktop-portal-hyprland
+sudo xbps-install -Ry hostdir/binpkgs hyprland-protocols
 
 # Enable necessary services
 for service in seatd dbus elogind cronyd cupsd polkitd; do
