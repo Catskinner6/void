@@ -10,8 +10,8 @@ PS1='[\u@\h \W]\$'
 ##########################################################
 
 
-I# Tab complete ignore-case
-bind 'set completion-ignore-case on
+# Tab complete ignore-case
+bind 'set completion-ignore-case on;
  
 
 ### ALIASES ###
@@ -27,7 +27,7 @@ alias xrm='sudo xbps-remove -R' #removes package and dependencies
 alias xro='sudo xbps-remove -o' #removes all orphaned packages
 alias xq='xbps-query -Rs'
 alias xqf='xbps-query -f'
-alias xlist='xbps-query -l | awk '{ print $2 }' | xargs -n1 xbps-uhelper getpkgname'
+alias xlist="xbps-query -l | awk '{ print $2 }' | xargs -n1 xbps-uhelper getpkgname"
 
 alias xloc='xlocate -S'
 
