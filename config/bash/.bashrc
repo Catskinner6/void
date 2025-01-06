@@ -37,3 +37,5 @@ alias fetch='fastfetch'
 alias nv='nvim'
 alias vi='nvim'
 alias vim='nvim'
+
+alias stow='stow -t ~'
