@@ -33,7 +33,7 @@ if [ -f ~/.bashrc ]; then
 fi
 
 # Stow/symlink config files
-cd ~/void/configs/
+cd ~/void/config/
 for dir in nvim bash alacritty foot hypr waybar; do
     stow $dir
 done
