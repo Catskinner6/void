@@ -49,7 +49,7 @@ echo "Config files stowed successfully"
 
 cd
 echo "changed dir"
-source ~/.bashrc
+. ~/.bashrc
 echo "and .bashrc sourced"
 
 
