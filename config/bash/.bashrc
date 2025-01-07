@@ -49,8 +49,8 @@ alias vim='nvim'
 alias stow='stow -t ~'
 
 # fzf
-source /usr/share/fzf/key-bindings.bash
-source /usr/share/fzf/completion.bash
+#source /usr/share/fzf/key-bindings.bash
+#source /usr/share/fzf/completion.bash
 
 # End of File add-ons
 #eval "$(zoxide init bash)"
