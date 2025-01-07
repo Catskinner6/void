@@ -82,6 +82,13 @@ done
 # Add user to seatd group
 sudo usermod -aG _seatd $USERNAME || { echo "Failed to add user to _seatd group."; exit 1; }
 
+# Create XDG_RUNTIME_DIR for seatd
+sudo mkdir -p /run/user/$(id -u)
+sudo chown $(id -u):$(id -g) /run/user/$(id -u)
+chmod 700 /run/user/$(id -u)
+
+sudo sv start seatd
+
 # Setup cron job for fstrim
 FSTRIM_PATH="/etc/cron.weekly/fstrim"
 if [ ! -f "$FSTRIM_PATH" ]; then
@@ -98,3 +105,4 @@ else
 fi
 
 echo "Script completed successfully!"
+echo "\nPlease reboot this machine."
