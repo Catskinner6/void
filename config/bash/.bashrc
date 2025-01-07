@@ -13,6 +13,7 @@ PS1='[\u@\h \W]\$'
 if [ -z "$XDG_RUNTIME_DIR" ]; then
     export XDG_RUNTIME_DIR="/run/user/$(id -u)"
     mkdir -p "$XDG_RUNTIME_DIR"
+    chown $(id -u):$(id -g) "$XDG_RUNTIME_DIR"  # Ensures proper ownership
     chmod 700 "$XDG_RUNTIME_DIR"
 fi
 
@@ -31,10 +32,11 @@ alias xup='sudo xbps-install -Su'
 alias xin='sudo xbps-install -S'
 alias xrm='sudo xbps-remove -R' #removes package and dependencies
 alias xro='sudo xbps-remove -o' #removes all orphaned packages
-alias xq='xbps-query -Rs'
+alias xqr='xbps-query -Rs'
 alias xqf='xbps-query -f'
 alias xlist="xbps-query -l | awk '{ print $2 }' | xargs -n1 xbps-uhelper getpkgname"
 
+# Xtools
 alias xloc='xlocate -S'
 
 # Terminal Programs
@@ -46,7 +48,7 @@ alias vim='nvim'
 
 alias stow='stow -t ~'
 
-# FZF
+# fzf
 source /usr/share/fzf/key-bindings.bash
 source /usr/share/fzf/completion.bash
 
