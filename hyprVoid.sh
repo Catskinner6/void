@@ -22,7 +22,7 @@ sudo xbps-install -Syu || { echo "Failed to update system."; exit 1; }
 # Install needed packages
 echo "Installing required packages..."
 sudo xbps-install -Sy base-devel git wget xtools neovim mesa-dri stow wl-clipboard || { echo "Package installation failed."; exit 1; }
-sudo xbps-install -Sy dunst dbus seatd cups cronie polkit || { echo "Package installation failed."; exit 1; }
+sudo xbps-install -Sy dunst dbus seatd libseat xcb-util-wm cups cronie polkit || { echo "Package installation failed."; exit 1; }
 sudo xbps-install -Sy fastfetch alacritty foot Thunar Waybar wofi rofi nerd-fonts || { echo "Package installation failed."; exit 1; }
 sudo xbps-install -Sy zig go rust fzf zoxide starship btop || { echo "Package installation failed."; exit 1; }
 
