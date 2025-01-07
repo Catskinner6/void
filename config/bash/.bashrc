@@ -17,7 +17,7 @@ if [ -z "$XDG_RUNTIME_DIR" ]; then
 fi
 
 # Tab complete ignore-case
-bind 'set completion-ignore-case on;
+bind 'set completion-ignore-case on'
  
 
 ### ALIASES ###
