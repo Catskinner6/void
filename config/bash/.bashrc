@@ -39,3 +39,11 @@ alias vi='nvim'
 alias vim='nvim'
 
 alias stow='stow -t ~'
+
+# FZF
+source /usr/share/fzf/key-bindings.bash
+source /usr/share/fzf/completion.bash
+
+# End of File add-ons
+eval "$(zoxide init bash)"
+eval "$(starship init bash)"
