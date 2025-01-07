@@ -1,5 +1,5 @@
 
-#!/bin/sh
+#!/bin/bash
 set -e  # Exit on any error
 
 # Start a `sudo` session
