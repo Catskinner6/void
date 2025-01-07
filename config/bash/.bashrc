@@ -18,7 +18,9 @@ PS1='[\u@\h \W]\$'
 #fi
 
 # Tab complete ignore-case
-bind 'set completion-ignore-case on'
+if [[ $- == *i* ]]; then
+    bind 'set completion-ignore-case on'
+fi
  
 
 ### ALIASES ###
