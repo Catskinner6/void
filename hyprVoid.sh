@@ -45,10 +45,13 @@ cd ~/void/config/ || { echo "Config directory not found."; exit 1; }
 for dir in nvim bash alacritty foot hypr waybar; do
     stow -t ~ $dir || { echo "Failed to stow $dir."; exit 1; }
 done
+cd ~
+source ~/.bashrc
+echo "Config files stowed successfully"
+echo "and .bashrc sourced"
 
 # Prepare for building Hyprland
 echo "Preparing for Hyprland build..."
-cd ~
 mkdir -p ~/.local/pkgs
 cd ~/.local/pkgs/
 [ ! -d void-packages ] && git clone https://github.com/void-linux/void-packages.git || echo "void-packages already cloned."
