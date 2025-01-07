@@ -20,10 +20,10 @@ sudo xbps-install -Syu
 
 # Install needed packages
 sudo xbps-install -Sy base-devel git wget xtools neovim mesa-dri stow wl-clipboard
-sudo xbps-install -Sy dunst dbus elogind seatd cups cronie polkit
+sudo xbps-install -Sy dunst dbus seatd cups cronie polkit
 sudo xbps-install -Sy fastfetch alacritty foot Thunar Waybar wofi rofi nerd-fonts
-sudo xbps-install -Sy zig go rust fzf zoxide starship
-
+sudo xbps-install -Sy zig go rust fzf zoxide starship btop
+#sudo xbps-install -Sy elogind #For sddm (laptop?)
 # Install void Repo
 git clone https://github.com/Catskinner6/void.git
 
@@ -35,10 +35,11 @@ fi
 # Stow/symlink config files
 cd ~/void/config/
 for dir in nvim bash alacritty foot hypr waybar; do
-    stow $dir
+    stow -t ~ $dir
 done
 
 # Prepare for building Hyprland
+cd ~
 mkdir -p ~/.local/pkgs
 cd ~/.local/pkgs/
 [ ! -d void-packages ] && git clone https://github.com/void-linux/void-packages.git
@@ -54,15 +55,16 @@ cat common/shlibs >> ~/.local/pkgs/void-packages/common/shlibs
 cp -r srcpkgs/* ~/.local/pkgs/void-packages/srcpkgs/
 cd ../void-packages/
 ./xbps-src pkg hyprland
-./xbps-src pkg xdg-desktop-portal-hyprland
-./xbps-src pkg hyprland-protocols
+#./xbps-src pkg xdg-desktop-portal-hyprland
+#./xbps-src pkg hyprland-protocols
 
-sudo xbps-install -Ry hostdir/binpkgs hyprland
-sudo xbps-install -Ry hostdir/binpkgs xdg-desktop-portal-hyprland
-sudo xbps-install -Ry hostdir/binpkgs hyprland-protocols
+sudo xbps-install -yR hostdir/binpkgs hyprland
+#sudo xbps-install -Ry hostdir/binpkgs xdg-desktop-portal-hyprland
+#sudo xbps-install -Ry hostdir/binpkgs hyprland-protocols
 
 # Enable necessary services
-for service in seatd dbus elogind cronyd cupsd polkitd; do
+# elogind for sddm
+for service in seatd dbus cronyd cupsd polkitd; do
     sudo ln -sf /etc/sv/$service /var/service/
 done
 
