@@ -46,7 +46,7 @@ for dir in nvim bash alacritty foot hypr waybar; do
     stow -t ~ $dir || { echo "Failed to stow $dir."; exit 1; }
 done
 cd ~
-source ~/.bashrc
+. ~/.bashrc
 echo "Config files stowed successfully"
 echo "and .bashrc sourced"
 
