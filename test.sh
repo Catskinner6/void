@@ -45,10 +45,11 @@ cd ~/void/config/ || { echo "Config directory not found."; exit 1; }
 #    stow -t ~ $dir || { echo "Failed to stow $dir."; exit 1; }
 #done
 stow -t ~ bash
+echo "Config files stowed successfully"
 
 cd ~
-source ~/.bashrc
-echo "Config files stowed successfully"
+echo "changed dir"
+source .bashrc
 echo "and .bashrc sourced"
 
 
