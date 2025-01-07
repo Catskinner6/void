@@ -9,6 +9,12 @@ PS1='[\u@\h \W]\$'
 
 ##########################################################
 
+# Set XDG_RUNTIME_DIR for seatd
+if [ -z "$XDG_RUNTIME_DIR" ]; then
+    export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+    mkdir -p "$XDG_RUNTIME_DIR"
+    chmod 700 "$XDG_RUNTIME_DIR"
+fi
 
 # Tab complete ignore-case
 bind 'set completion-ignore-case on;
