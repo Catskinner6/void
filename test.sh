@@ -49,6 +49,18 @@ echo "Config files stowed successfully"
 
 cd
 echo "changed dir"
+
+# Debugging: check the path to .bashrc
+echo "BASHRC PATH: $HOME/.bashrc"
+ls -l $HOME/.bashrc
+
+# Source the .bashrc file
+if [ -f "$HOME/.bashrc" ]; then
+    source "$HOME/.bashrc"
+else
+    echo ".bashrc file not found!"
+    exit 1
+fi
 . ~/.bashrc
 echo "and .bashrc sourced"
 
