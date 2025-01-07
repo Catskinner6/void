@@ -34,8 +34,8 @@ fi
 
 # Backup .bashrc if it exists
 if [ -f ~/.bashrc ]; then
-    echo "Backing up .bashrc..."
-    mv ~/.bashrc ~/.bashrc.bak
+    echo "Deleting .bashrc..."
+    rm -rf ~/.bashrc
 fi
 
 # Stow/symlink config files
@@ -49,7 +49,7 @@ echo "Config files stowed successfully"
 
 cd
 echo "changed dir"
-source .bashrc
+source ~/.bashrc
 echo "and .bashrc sourced"
 
 
