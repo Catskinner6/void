@@ -25,13 +25,13 @@ echo "Installing base packages..."
 # System Basics
 sudo xbps-install -Sy git wget base-devel xtools mesa-dri stow nerd-fonts bash-completion || { echo "Package installation failed."; exit 1; }
 # Wayland Specific
-sudo xbps-install -Sy linux-firmware-intel mesa-dri wl-clipboard grim slurp imv yazi mpv bat|| { echo "Package installation failed."; exit 1; }
+sudo xbps-install -Sy linux-firmware-intel mesa-dri wl-clipboard grim slurp wlopm|| { echo "Package installation failed."; exit 1; }
 # River / DE
 sudo xbps-install -Sy river gdm fuzzel yambar wlr-randr kanshi swaylock swayidle wlsunset swaybg|| { echo "Package installation failed."; exit 1; }
 # Services
 sudo xbps-install -Sy dbus avahi cups cronie elogind dunst polkit-gnome|| { echo "Package installation failed."; exit 1; }
 # Terminal
-sudo xbps-install -Sy alacritty foot fastfetch neovim zig go rust fzf zoxide starship btop himalaya zathura || { echo "Package installation failed."; exit 1; }
+sudo xbps-install -Sy alacritty foot fastfetch neovim zig go rust fzf zoxide starship btop himalaya zathura imv yazi mpv bat || { echo "Package installation failed."; exit 1; }
 # Audio and extras
 sudo xbps-install -Sy pipeWire alsa-pipewire libjack-pipewire wireplumber libpulseaudio qutebrowser || { echo "Package installation failed."; exit 1; }
 
