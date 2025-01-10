@@ -73,7 +73,7 @@ cd void-packages/ || { echo "void-packages directory not found."; exit 1; }
 
 # Enable necessary services
 echo "Enabling services..."
-for service in dbus chronyd cupsd avahi-daemon gdm; do
+for service in dbus crond cupsd avahi-daemon gdm elogind; do
     if [ -d /etc/sv/$service ]; then
         sudo ln -sf /etc/sv/$service /var/service/ || { echo "Failed to enable $service."; exit 1; }
     else
