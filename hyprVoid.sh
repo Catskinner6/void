@@ -61,7 +61,7 @@ cd ~/downloads
 # Download the ZIP files
 ZIP_FIRA="FiraCode.zip"
 ZIP_MESLO="MesloLG.zip"
-curl -L -o "$ZIP_FILE" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/FiraCode.zip"
+curl -L -o "$ZIP_FIRA" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/FiraCode.zip"
 curl -L -o "$ZIP_MESLO" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/Meslo.zip"
 # Unzip the file into /usr/share/fonts
 sudo unzip -o "$ZIP_FIRA" -d ~/usr/share/fonts
