@@ -29,7 +29,7 @@ sudo xbps-install -Sy linux-firmware-intel mesa-dri wl-clipboard grim slurp imv 
 # River / DE
 sudo xbps-install -Sy river gdm fuzzel yambar wlr-randr kanshi swaylock swayidle qutebrowser || { echo "Package installation failed."; exit 1; }
 # Services
-sudo xbps-install -Sy dbus avahi cups cronie elogind dunst || { echo "Package installation failed."; exit 1; }
+sudo xbps-install -Sy dbus avahi cups cronie elogind dunst polkit-gnome|| { echo "Package installation failed."; exit 1; }
 # Terminal
 sudo xbps-install -Sy alacritty foot fastfetch neovim zig go rust fzf zoxide starship btop himalaya zathura || { echo "Package installation failed."; exit 1; }
 # Audio and extras
