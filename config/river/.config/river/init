@@ -19,7 +19,7 @@ riverctl hide-cursor when-typing enabled
 # Note: the "Super" modifier is also known as Logo, GUI, Windows, Mod4, etc.
 
 # Super+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
-riverctl map normal Super+Shift Return spawn foot
+riverctl map normal Super X spawn foot
 
 # Super+Q to close the focused view
 riverctl map normal Super Q close
@@ -28,7 +28,7 @@ riverctl map normal Super Q close
 riverctl map normal Super+Shift E exit
 
 # Launcher
-riverctl map normal Super D spawn "fuzzel"
+riverctl map normal Super F spawn "fuzzel"
 
 # Toggle waybar
 riverctl map normal Super B spawn "killall yambar || ~/.config/yambar/scripts/yambar-start.sh"
