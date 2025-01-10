@@ -44,7 +44,7 @@ fi
 # Stow/symlink config files
 echo "Stowing configuration files..."
 cd ~/void/config/ || { echo "Config directory not found."; exit 1; }
-for dir in nvim bash alacritty foot hypr waybar; do
+for dir in nvim bash alacritty foot; do
     stow -t ~ $dir || { echo "Failed to stow $dir."; exit 1; }
 done
 cd ~
