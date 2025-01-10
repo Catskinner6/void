@@ -21,8 +21,8 @@ sudo xbps-install -Syu || { echo "Failed to update system."; exit 1; }
 
 # Install needed packages
 echo "Installing required packages..."
-sudo xbps-install -Sy base-devel git wget xtools neovim mesa-dri stow wl-clipboard || { echo "Package installation failed."; exit 1; }
-sudo xbps-install -Sy dunst dbus seatd elogind libseat xcb-util-wm cups chrony polkit || { echo "Package installation failed."; exit 1; }
+sudo xbps-install -Sy base-devel git wget xtools neovim mesa-dri stow wl-clipboard xorg-server-xwayland|| { echo "Package installation failed."; exit 1; }
+sudo xbps-install -Sy dunst dbus seatd elogind libseat xcb-util-wm cups chrony polkit sddm || { echo "Package installation failed."; exit 1; }
 sudo xbps-install -Sy fastfetch alacritty foot Thunar Waybar wofi rofi nerd-fonts || { echo "Package installation failed."; exit 1; }
 sudo xbps-install -Sy zig go rust fzf zoxide starship btop || { echo "Package installation failed."; exit 1; }
 
@@ -74,7 +74,7 @@ sudo xbps-install -yR hostdir/binpkgs hyprland || { echo "Hyprland installation 
 
 # Enable necessary services
 echo "Enabling services..."
-for service in seatd dbus chronyd cupsd polkitd elogind; do
+for service in seatd dbus chronyd cupsd polkitd elogind sddm; do
     if [ -d /etc/sv/$service ]; then
         sudo ln -sf /etc/sv/$service /var/service/ || { echo "Failed to enable $service."; exit 1; }
     else
@@ -86,9 +86,9 @@ done
 sudo usermod -aG _seatd $USERNAME || { echo "Failed to add user to _seatd group."; exit 1; }
 
 # Create XDG_RUNTIME_DIR for seatd
-sudo mkdir -p /run/user/$(id -u)
-sudo chown $(id -u):$(id -g) /run/user/$(id -u)
-chmod 700 /run/user/$(id -u)
+#sudo mkdir -p /run/user/$(id -u)
+#sudo chown $(id -u):$(id -g) /run/user/$(id -u)
+#chmod 700 /run/user/$(id -u)
 
 sudo sv start seatd
 
