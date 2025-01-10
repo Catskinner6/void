@@ -9,14 +9,6 @@ PS1='[\u@\h \W]\$'
 
 ##########################################################
 
- Set XDG_RUNTIME_DIR for seatd
-if [ -z "$XDG_RUNTIME_DIR" ]; then
-    export XDG_RUNTIME_DIR="/run/user/$(id -u)"
-    mkdir -p "$XDG_RUNTIME_DIR"
-    chown $(id -u):$(id -g) "$XDG_RUNTIME_DIR"  # Ensures proper ownership
-    chmod 700 "$XDG_RUNTIME_DIR"
-fi
-
 # Tab complete ignore-case
 if [[ $- == *i* ]]; then
     bind 'set completion-ignore-case on'
