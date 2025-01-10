@@ -1,4 +1,3 @@
-
 #!/bin/bash
 set -e  # Exit on any error
 
@@ -16,53 +15,23 @@ trap 'kill $SUDO_PID' EXIT  # Ensure the session keeper stops on script exit
 USERNAME=$(whoami)
 echo "Script running for user: $USERNAME"
 
-# Update the system and repositories
-echo "Updating system..."
-sudo xbps-install -Syu || { echo "Failed to update system."; exit 1; }
+sudo xbps-install -Sy unzip || { echo "Failed to update system."; exit 1; }
 
-# Install needed packages
-echo "Installing git and stow packages"
-sudo xbps-install -Sy git stow || { echo "Package installation failed."; exit 1; }
-echo " Git and Stow succesfully installed"
+# Download the file
+cd ~
+sudo mkdir -p /usr/share/fonts  # Use -p to avoid errors if the directory already exists
+mkdir -p downloads  # Same here
+cd ~/downloads
 
-# Install my void repo
-if [ ! -d ~/void ]; then
-    git clone https://github.com/Catskinner6/void.git || { echo "Failed to clone void repository."; exit 1; }
-else
-    echo "Void repository already exists. Skipping clone."
-fi
+# Download the ZIP file
+ZIP_FILE="FiraCode.zip"
+curl -L -o "$ZIP_FILE" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/FiraCode.zip"
 
-# Backup .bashrc if it exists
-if [ -f ~/.bashrc ]; then
-    echo "Deleting .bashrc..."
-    rm -rf ~/.bashrc
-fi
+# Unzip the file into ~/.fonts
+unzip -o "$ZIP_FILE" -d ~/.fonts
 
-# Stow/symlink config files
-echo "Stowing configuration files..."
-cd ~/void/config/ || { echo "Config directory not found."; exit 1; }
-#for dir in nvim bash alacritty foot hypr waybar; do
-#    stow -t ~ $dir || { echo "Failed to stow $dir."; exit 1; }
-#done
-stow -t ~ bash
-echo "Config files stowed successfully"
-
-cd
-echo "changed dir"
-
-# Debugging: check the path to .bashrc
-echo "BASHRC PATH: $HOME/.bashrc"
-ls -l $HOME/.bashrc
-
-# Source the .bashrc file
-if [ -f "$HOME/.bashrc" ]; then
-    source "$HOME/.bashrc"
-else
-    echo ".bashrc file not found!"
-    exit 1
-fi
-. ~/.bashrc
-echo "and .bashrc sourced"
+# Move the ZIP file into ~/.fonts (if you want to keep the ZIP file)
+sudo mv "$ZIP_FILE" /usr/share/fonts
 
 
 echo "Script completed successfully!"
