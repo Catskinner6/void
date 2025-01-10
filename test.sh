@@ -24,14 +24,13 @@ mkdir -p downloads  # Same here
 cd ~/downloads
 
 # Download the ZIP file
-ZIP_FILE="FiraCode.zip"
-curl -L -o "$ZIP_FILE" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/FiraCode.zip"
-
-# Unzip the file into ~/.fonts
-unzip -o "$ZIP_FILE" -d ~/.fonts
-
-# Move the ZIP file into ~/.fonts (if you want to keep the ZIP file)
-sudo mv "$ZIP_FILE" /usr/share/fonts
+#ZIP_FIRA="FiraCode.zip"
+ZIP_MESLO="MesloLG.zip"
+#curl -L -o "$ZIP_FILE" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/FiraCode.zip"
+curl -L -o "$ZIP_MESLO" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/Meslo.zip"
+# Unzip the file into /usr/share/fonts
+#sudo unzip -o "$ZIP_FIRA" -d ~/usr/share/fonts
+sudo unzip -o "$ZIP_MESLO" -d ~/usr/share/fonts
 
 
 echo "Script completed successfully!"
