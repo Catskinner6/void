@@ -23,7 +23,8 @@ sudo xbps-install -Syu || { echo "Failed to update system."; exit 1; }
 # Install needed packages
 echo "Installing required packages..."
 sudo xbps-install -Sy base-devel git wget xtools neovim mesa-dri stow wl-clipboard || { echo "Package installation failed."; exit 1; }
-sudo xbps-install -Sy dbus seatd elogind libseat cups chrony polkit || { echo "Package installation failed."; exit 1; }
+sudo xbps-install -Sy gnome gnome-apps gdm xorg-server-xwayland mutter || { echo "Package installation failed."; exit 1; }
+sudo xbps-install -Sy dbus avahi cups chrony || { echo "Package installation failed."; exit 1; }
 sudo xbps-install -Sy fastfetch alacritty foot Thunar Waybar wofi rofi nerd-fonts || { echo "Package installation failed."; exit 1; }
 sudo xbps-install -Sy zig go rust fzf zoxide starship btop || { echo "Package installation failed."; exit 1; }
 
@@ -64,23 +65,13 @@ cd void-packages/ || { echo "void-packages directory not found."; exit 1; }
 
 # Enable necessary services
 echo "Enabling services..."
-for service in seatd dbus chronyd cupsd polkitd elogind; do
+for service in dbus chronyd cupsd avahi-daemon gdm; do
     if [ -d /etc/sv/$service ]; then
         sudo ln -sf /etc/sv/$service /var/service/ || { echo "Failed to enable $service."; exit 1; }
     else
         echo "Service $service not found. Skipping."
     fi
 done
-
-# Add user to seatd group
-sudo usermod -aG _seatd $USERNAME || { echo "Failed to add user to _seatd group."; exit 1; }
-
-# Create XDG_RUNTIME_DIR for seatd
-sudo mkdir -p /run/user/$(id -u)
-sudo chown $(id -u):$(id -g) /run/user/$(id -u)
-chmod 700 /run/user/$(id -u)
-
-sudo sv start seatd
 
 # Setup cron job for fstrim
 FSTRIM_PATH="/etc/cron.weekly/fstrim"
@@ -98,4 +89,4 @@ else
 fi
 
 echo "Script completed successfully!"
-echo "\nPlease reboot this machine."
+echo "\nPlease reboot this machine. and start the gdm service."
