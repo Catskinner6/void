@@ -31,7 +31,7 @@ curl -L -o "$ZIP_MESLO" "https://github.com/ryanoasis/nerd-fonts/releases/downlo
 # Unzip the file into /usr/share/fonts
 #sudo unzip -o "$ZIP_FIRA" -d ~/usr/share/fonts
 sudo unzip -o "$ZIP_MESLO" -d ~/usr/share/fonts
-
+cd ~
 
 echo "Script completed successfully!"
 echo "\nPlease reboot this machine."
