@@ -23,7 +23,7 @@ sudo xbps-install -Syu || { echo "Failed to update system."; exit 1; }
 # Install base packages
 echo "Installing base packages..."
 # System Basics
-sudo xbps-install -Sy git wget base-devel xtools mesa-dri stow nerd-fonts bash-completion || { echo "Package installation failed."; exit 1; }
+sudo xbps-install -Sy git wget base-devel xtools stow nerd-fonts bash-completion || { echo "Package installation failed."; exit 1; }
 # Wayland Specific
 sudo xbps-install -Sy linux-firmware-intel mesa-dri wl-clipboard grim slurp wlopm|| { echo "Package installation failed."; exit 1; }
 # River / DE
