@@ -23,9 +23,10 @@ sudo xbps-install -Syu || { echo "Failed to update system."; exit 1; }
 echo "Installing required packages..."
 sudo xbps-install -Sy base-devel git wget xtools neovim mesa-dri stow wl-clipboard xorg-server-xwayland|| { echo "Package installation failed."; exit 1; }
 sudo xbps-install -Sy dunst dbus seatd elogind libseat xcb-util-wm cups chrony polkit sddm || { echo "Package installation failed."; exit 1; }
-sudo xbps-install -Sy fastfetch alacritty foot Thunar Waybar wofi rofi nerd-fonts || { echo "Package installation failed."; exit 1; }
+sudo xbps-install -Sy fastfetch alacritty foot Thunar Waybar wofi rofi nerd-fonts unzip || { echo "Package installation failed."; exit 1; }
 sudo xbps-install -Sy zig go rust fzf zoxide starship btop || { echo "Package installation failed."; exit 1; }
 
+cd ~
 # Install void repo
 if [ ! -d ~/void ]; then
     git clone https://github.com/Catskinner6/void.git || { echo "Failed to clone void repository."; exit 1; }
@@ -49,6 +50,26 @@ cd ~
 #. ~/.bashrc
 echo "Config files stowed successfully"
 #echo "and .bashrc sourced"
+
+# Download and Install FiraCode and MesloLG
+echo "Installing FiraCode and MesloLG Fonts"
+cd ~
+sudo mkdir -p /usr/share/fonts  # Use -p to avoid errors if the directory already exists
+mkdir -p downloads  # Same here
+cd ~/downloads
+
+# Download the ZIP files
+ZIP_FIRA="FiraCode.zip"
+ZIP_MESLO="MesloLG.zip"
+curl -L -o "$ZIP_FILE" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/FiraCode.zip"
+curl -L -o "$ZIP_MESLO" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/Meslo.zip"
+# Unzip the file into /usr/share/fonts
+sudo unzip -o "$ZIP_FIRA" -d ~/usr/share/fonts
+sudo unzip -o "$ZIP_MESLO" -d ~/usr/share/fonts
+cd ~
+echo "Sucessfully installed FiraCode and MesloLG"
+
+
 
 # Prepare for building Hyprland
 echo "Preparing for Hyprland build..."
