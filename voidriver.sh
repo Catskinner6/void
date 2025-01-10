@@ -33,7 +33,7 @@ sudo xbps-install -Sy dbus avahi cups cronie elogind dunst polkit-gnome|| { echo
 # Terminal
 sudo xbps-install -Sy alacritty foot fastfetch neovim zig go rust fzf zoxide starship btop himalaya zathura imv yazi mpv bat || { echo "Package installation failed."; exit 1; }
 # Audio and extras
-sudo xbps-install -Sy pipeWire alsa-pipewire libjack-pipewire wireplumber libpulseaudio qutebrowser || { echo "Package installation failed."; exit 1; }
+sudo xbps-install -Sy pipewire alsa-pipewire libjack-pipewire wireplumber libpulseaudio qutebrowser || { echo "Package installation failed."; exit 1; }
 
 
 # Install void repo
