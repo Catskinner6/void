@@ -99,6 +99,7 @@ fi
 echo "Installing fuzzel and yambar packages..."
 sudo xbps-install -Sy fuzzel yambar wlr-randr || { echo "Package installation failed."; exit 1; }
 
+##############################################################
 # Setup ~/.config/fuzzel/fuzzel.ini
 mkdir -p "$HOME/.config/fuzzel"
 FUZZEL="$HOME/.config/fuzzel/fuzzel.ini"
@@ -126,7 +127,7 @@ inner-pad=10
 # letter-spacing=0
 line-height=18
 [colors]
-background=000000AA
+background=000000CC
 text=efefefef
 match=fabd2fff
 selection-match=fabd2fff
@@ -143,13 +144,12 @@ radius=3
 # exit-immediately-if-empty=no
 
 EOF
-    chmod +x "$FUZZEL" || { echo "Failed to set executable permission on yambar-start script."; exit 1; }
-    echo "Yambar-start script created succesfully"
+    echo "Fuzzel.init created succesfully"
 else
-    echo "Yambar-start script already exists at $FUZZEL. Skipping creation."
+    echo "Fuzzel.init already exists at $FUZZEL. Skipping creation."
 fi
 
-
+##############################################################
 
 # Setup ~/.config/yambar/config.yml
 mkdir -p "$HOME/.config/yambar/"
@@ -251,15 +251,15 @@ bar:
                 font: *nerdfont
                 foreground: 98971aff
                 on-click: sh -c "~/.config/yambar/scripts/void-updates.sh update"
-    - script:
-        path: ~/.config/yambar/scripts/idleinhibit.sh
-        args: []
-        content: 
-            string: 
-                margin: 0
-                text: "{idleinhibit}"
-                font: *nerdfont
-                on-click: sh -c "~/.config/yambar/scripts/idleinhibit.sh toggle"
+   # - script:
+   #     path: ~/.config/yambar/scripts/idleinhibit.sh
+   #     args: []
+   #     content: 
+   #         string: 
+   #             margin: 0
+   #             text: "{idleinhibit}"
+   #             font: *nerdfont
+   #             on-click: sh -c "~/.config/yambar/scripts/idleinhibit.sh toggle"
     - pipewire:
         anchors:
           volume: &volume
@@ -417,6 +417,136 @@ EOF
 else
     echo "Yambar-start script already exists at $YAMBAR_START. Skipping creation."
 fi
+
+##############################################################
+# Setup ~/.config/yambar/scripts
+DATER="$HOME/.config/yambar/scripts/dater.sh"
+if [ ! -f "$DATER" ]; then
+    echo "Creating dater.sh at $DATER"
+    cat > "$DATER" <<EOF
+#!/bin/sh
+
+while true; do
+number=$(date +'%d')
+
+case $number in
+    1*)extension=th;;
+    *1)extension=st;;
+    *2)extension=nd;;
+    *3)extension=rd;;
+    *)extension=th;;
+esac
+
+date=$(date +"%A $(printf ${number##0}$extension) %B %Y -")
+
+echo "date|string|$date"
+echo ""
+
+hour=$(date +'%H')
+minute=$(date +'%M')
+
+second=$(expr $hour \* 3600 + $minute \* 60)
+
+sleep "$second"
+done
+
+EOF
+    chmod +x "$DATER" || { echo "Failed to set executable permission on dater.sh."; exit 1; }
+    echo "dater.sh created succesfully"
+else
+    echo "dater.sh already exists at $DATER. Skipping creation."
+fi
+
+##############################################################
+CAL="$HOME/.config/yambar/scripts/calendar.sh"
+if [ ! -f "$CAL" ]; then
+    echo "Creating calendar.sh at $CAL"
+    cat > "$CAL" <<EOF
+#!/bin/bash
+
+# Calendar script
+
+function ShowCalendar() {
+	dunstify -i "calendar"  "     Calendar" "$(cal --color=always | sed "s/..7m/<b><span color=\"#fabd2f\">/;s/..27m/<\/span><\/b>/")" -r 124
+}
+
+function EditCalendar() {
+  echo 
+}
+
+case "$1" in
+        show)
+            ShowCalendar
+            ;;
+         
+        edit)
+            EditCalendar
+            ;;
+         
+        *)
+            echo $"Usage: ${0##*/} {show|edit}"
+            exit 1
+ 
+esac
+
+
+EOF
+    chmod +x "$CAL" || { echo "Failed to set executable permission on calendar.sh."; exit 1; }
+    echo "calendar.sh created succesfully"
+else
+    echo "calendar.sh already exists at $CAL. Skipping creation."
+fi
+
+VOID="$HOME/.config/yambar/scripts/void-updates.sh"
+if [ ! -f "$VOID" ]; then
+    echo "Creating void-updates.sh at $VOID"
+    cat > "$VOID" <<EOF
+#!/bin/bash
+
+function update-yambar {
+echo "updates|string|"
+echo ""
+
+while true; do
+
+xbps-install -Mun 1> /tmp/void-updates
+updates="$(cat /tmp/void-updates | awk '{ print $1 }')"
+number="$(cat /tmp/void-updates | wc -l)"
+
+if [ "$number" -gt 0 ]; then
+    text=" $number"
+else
+    text=""
+fi
+
+echo "updates|string|$text"
+echo ""
+sleep 30m
+
+done
+}
+
+function update {
+	foot bash -c "sudo xbps-install -Suv"; sh -c "~/.config/yambar/scripts/yambar-start.sh"
+}
+
+case $1 in
+	update)
+		update
+		;;
+	*)
+		update-yambar
+		;;
+esac
+exit 0
+v
+EOF
+    chmod +x "$VOID" || { echo "Failed to set executable permission on void-updates.sh."; exit 1; }
+    echo "void-updates.sh created succesfully"
+else
+    echo "void-updates.sh already exists at $VOID. Skipping creation."
+fi
+
 
 ####################################################################################################################
 ####################################################################################################################
