@@ -46,12 +46,12 @@ getent group _seatd > /dev/null && sudo usermod -aG _seatd $USERNAME || echo "Gr
 
 
 # Setup ~/.config/river/init
-mkdir -p ~/.config/river/
-RIVER_INIT="~/.config/river/init"
+mkdir -p "$HOME/.config/river"
+RIVER_INIT="$HOME/.config/river/init"
 if [ ! -f "$RIVER_INIT" ]; then
     echo "Creating river init file at $RIVER_INIT"
-    sudo tee "$RIVER_INIT" > /dev/null <<EOF
-#!/bin/bash
+    cat > "$RIVER_INIT" <<EOF
+#!/bin/sh
 
 term="foot"
 browser1="qutebrowser"
@@ -63,18 +63,15 @@ menu="fuzzel"
 riverctl map normal Super+Shift E exit
 riverctl map normal Super Q close
 
-riverctl map normal Super X spawn $term
-riverctl map normal Super F spawn $menu
-riverctl map normal Super B spawn $browser1
-riverctl map normal Super+Shift B spawn $browser2
-
-
+riverctl map normal Super X spawn \$term
+riverctl map normal Super F spawn \$menu
+riverctl map normal Super B spawn \$browser1
+riverctl map normal Super+Shift B spawn \$browser2
 EOF
-    sudo chmod +x "$RIVER_INIT" || { echo "Failed to set executable permission on river init file."; exit 1; }
+    chmod +x "$RIVER_INIT" || { echo "Failed to set executable permission on river init file."; exit 1; }
 else
     echo "River init file already exists at $RIVER_INIT. Skipping creation."
 fi
-
 ####################################################################################################################
 ####################################################################################################################
 
