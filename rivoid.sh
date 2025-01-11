@@ -99,6 +99,58 @@ fi
 echo "Installing fuzzel and yambar packages..."
 sudo xbps-install -Sy fuzzel yambar wlr-randr || { echo "Package installation failed."; exit 1; }
 
+# Setup ~/.config/fuzzel/fuzzel.ini
+mkdir -p "$HOME/.config/fuzzel"
+FUZZEL="$HOME/.config/fuzzel/fuzzel.ini"
+if [ ! -f "$FUZZEL" ]; then
+    echo "Creating fuzzel.ini at $FUZZEL"
+    cat > "$FUZZEL" <<EOF
+# output=<not set>
+font=GoMono Nerd Font:size=10
+dpi-aware=no
+# prompt=> 
+icon-theme=hicolor
+icons-enabled=yes
+
+fuzzy=yes
+
+# lines=15
+width=35
+horizontal-pad=10
+vertical-pad=10
+inner-pad=10
+
+# image-size-ratio=0.5
+
+# line-height=<use font metrics>
+# letter-spacing=0
+line-height=18
+[colors]
+background=000000AA
+text=efefefef
+match=fabd2fff
+selection-match=fabd2fff
+selection=666666ff
+selection-text=efefefef
+border=33eeffee
+
+[border]
+width=2
+radius=3
+
+[dmenu]
+# mode=text  # text|index
+# exit-immediately-if-empty=no
+
+EOF
+    chmod +x "$FUZZEL" || { echo "Failed to set executable permission on yambar-start script."; exit 1; }
+    echo "Yambar-start script created succesfully"
+else
+    echo "Yambar-start script already exists at $FUZZEL. Skipping creation."
+fi
+
+
+
 # Setup ~/.config/yambar/config.yml
 mkdir -p "$HOME/.config/yambar/"
 YAMBAR_CONF="$HOME/.config/yambar/config.yml"
