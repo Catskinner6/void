@@ -69,6 +69,10 @@ riverctl map normal Super X spawn \$term
 riverctl map normal Super F spawn \$menu
 riverctl map normal Super B spawn \$browser1
 riverctl map normal Super+Shift B spawn \$browser2
+
+# Toggle statusbar
+riverctl map normal Super+Shift R spawn "killall yambar || ~/.config/yambar/scripts/yambar-start.sh"
+
 EOF
     chmod +x "$RIVER_INIT" || { echo "Failed to set executable permission on river init file."; exit 1; }
     echo "River init file created succesfully"
@@ -78,10 +82,277 @@ fi
 
 ####################################################################################################################
 ####################################################################################################################
-## ADD YAMBAR ##
+## ADD YAMBAR AND FUZZEL##
 ####################################################################################################################
+echo "Installing fuzzel and yambar packages..."
+sudo xbps-install -Sy fuzzel yambar wlr-randr || { echo "Package installation failed."; exit 1; }
+
+# Setup ~/.config/yambar/config.yml
+mkdir -p "$HOME/.config/yambar/"
+YAMBAR_CONF="$HOME/.config/yambar/config.yml"
+if [ ! -f "$YAMBAR_CONF" ]; then
+    echo "Creating yambar-start script at $YAMBAR_CONF"
+    cat > "$YAMBAR_CONF" <<EOF
+nerdfont: &nerdfont Symbols Nerd Font Mono:pixelsize=12 
+gomono: &gomono GoMono Nerd Font Mono:pixelsize=12
+bg_default: &bg_default {stack: [{background: {color: 00000000}}, {underline: {size: 3, color: 98971aff}}]}
+
+bar:
+  font: *gomono
+  height: 20
+  location: top
+  right-spacing: 8
+  right-margin: 10
+  border:
+    top-margin: 5 
+    left-margin: 10
+    right-margin: 10
+    color: D8DEE900 
+  background: 000000AA
+  foreground: ffffffff
+
+  left:
+    - river:
+        anchors:
+          - base: &river_base
+              left-margin: 10
+              right-margin: 10 
+              default: {string: {text: , font: *gomono}}
+              conditions:
+                id == 1: {string: {text: 1, font: *gomono}}  
+                id == 2: {string: {text: 2, font: *gomono}}  
+                id == 3: {string: {text: 3, font: *gomono}}  
+                id == 4: {string: {text: 4, font: *gomono}}  
+                id == 5: {string: {text: 5, font: *gomono}}  
+                id == 6: {string: {text: 6, font: *gomono}}  
+                id == 7: {string: {text: 7, font: *gomono}}  
+                id == 8: {string: {text: 8, font: *gomono}}  
+                id == 9: {string: {text: 9, font: *gomono}}
+                # id == 21: {string: {text: "Scratchpad", font: *gomono}}
+
+        content:
+          map:
+            on-click: 
+              left: sh -c "riverctl set-focused-tags $((1 << ({id} - 1)))"
+              right: sh -c "riverctl toggle-focused-tags $((1 << ({id} -1)))"
+              middle: sh -c "riverctl toggle-view-tags $((1 << ({id} -1)))"
+            conditions:
+              state == urgent:
+                map:
+                  <<: *river_base
+                  deco: {background: {color: D08770ff}}
+              state == focused:
+                map:
+                  <<: *river_base
+                  deco: *bg_default
+              state == visible && ~occupied:
+                map:
+                  <<: *river_base
+              state == visible && occupied:
+                map:
+                  <<: *river_base
+                  deco: *bg_default
+              state == unfocused:
+                map:
+                  <<: *river_base
+              state == invisible && ~occupied: {empty: {}}
+              state == invisible && occupied:
+                map:
+                  <<: *river_base
+                  deco: {underline: {size: 3, color: 00000000}}
+
+  center:
+    - script:
+        path: ~/.config/yambar/scripts/dater.sh
+        args: []
+        content:
+            string: 
+                margin: 0
+                text: "{date}"
+                on-click: sh -c "~/.config/yambar/scripts/calendar.sh show"
+    - clock:
+        content:
+          - string:
+                margin: 0
+                text: "{time}"
+
+  right: 
+    - script:
+        path: ~/.config/yambar/scripts/void-updates.sh
+        args: []
+        content: 
+            string: 
+                margin: 0
+                text: "{updates}"
+                font: *nerdfont
+                foreground: 98971aff
+                on-click: sh -c "~/.config/yambar/scripts/void-updates.sh update"
+    - script:
+        path: ~/.config/yambar/scripts/idleinhibit.sh
+        args: []
+        content: 
+            string: 
+                margin: 0
+                text: "{idleinhibit}"
+                font: *nerdfont
+                on-click: sh -c "~/.config/yambar/scripts/idleinhibit.sh toggle"
+    - pipewire:
+        anchors:
+          volume: &volume
+            conditions:
+              muted:
+                string:
+                  text: "0%"
+                  on-click:
+                    middle: sh -c "amixer set Master 1+ toggle"
+              ~muted:
+                string:
+                  text: "{cubic_volume}%"
+                  on-click:
+                    left: sh -c "amixer sset Master 2%-"
+                    middle: sh -c "amixer set Master 1+ toggle"
+                    right: sh -c "amixer sset Master 2%+"
+        content:
+          list:
+            items:
+              - map:
+                  conditions:
+                    type == "sink":
+                      map:
+                        conditions:
+                          icon == "audio-headset-bluetooth":
+                            string: {text: "󰋋", font: *nerdfont}
+                          muted: {string: {text: "󰝟", font: *nerdfont}}
+                        default:
+                          - ramp:
+                              tag: cubic_volume
+                              items:
+                                - string: {text: "󰕿", font: *nerdfont}
+                                - string: {text: "󰖀", font: *nerdfont}
+                                - string: {text: "󰕾", font: *nerdfont}
+                    type == "source":
+                      - string: {text: "", font: *nerdfont, left-margin: 5}
+              - map:
+                  <<: *volume
+    - backlight:
+        name: amdgpu_bl0
+        content: [ string: {text: , font: *nerdfont}, string: {text: "{percent}%", on-click: { left: sh -c "light -U 5", right: sh -c "light -A 5"}}]
+    - network:
+        name: enp5s0
+        content:
+          map:
+            conditions:
+              state == down: {string: {text: 󰲜, font: *nerdfont, foreground: ffffffff}}
+              ~carrier: {empty: {}}
+              carrier:
+                map:
+                  default: {string: {text: 󰈀, font: *nerdfont, foreground: ffffffff}}
+                  conditions:
+                    state == up && ipv4 != "": {string: {text: 󰈀, font: *nerdfont}}
+    - network:
+        name: wlp3s0
+        poll-interval: 1000
+        content:
+          map:
+            default: {string: {text: , font: *nerdfont, foreground: ffffff66}}
+            conditions:
+              state == down: {string: {text: , font: *nerdfont, foreground: ffffffff}}
+              state == up:
+                map:
+                  default:
+                    - string: {text: , font: *nerdfont}
+                    - string: {text: "{ssid} {dl-speed:mb}/{ul-speed:mb} Mb/s"}
+
+                  conditions:
+                    ipv4 == "":
+                      - string: {text: , font: *nerdfont, foreground: ffffff66}
+                      - string: {text: "{ssid} {dl-speed:mb}/{ul-speed:mb} Mb/s", foreground: ffffff66}
+    - battery:
+        name: BAT0
+        poll-interval: 10000
+        anchors:
+          discharging: &discharging
+            list:
+              items:
+                - ramp:
+                    tag: capacity
+                    items:
+                      - string: {text: , foreground: ff0000ff, font: *nerdfont}
+                      - string: {text: , foreground: ffa600ff, font: *nerdfont}
+                      - string: {text: , font: *nerdfont}
+                      - string: {text: , font: *nerdfont}
+                      - string: {text: , font: *nerdfont}
+                      - string: {text: , font: *nerdfont}
+                      - string: {text: , font: *nerdfont}
+                      - string: {text: , font: *nerdfont}
+                      - string: {text: , font: *nerdfont}
+                      - string: {text: , foreground: ffffffff, font: *nerdfont}
+                - string: {text: "{capacity}% {estimate}"}
+        content:
+          map:
+            conditions:
+              state == unknown:
+                <<: *discharging
+              state == discharging:
+                <<: *discharging
+              state == charging:
+                - string: {text: , foreground: ffffffff, font: *nerdfont}
+                - string: {text: "{capacity}% {estimate}"}
+              state == full:
+                - string: {text: , foreground: ffffffff, font: *nerdfont}
+                - string: {text: "{capacity}% full"}
+              state == "not charging":
+                - ramp:
+                    tag: capacity
+                    items:
+                      - string: {text:  , foreground: ff0000ff, font: *nerdfont}
+                      - string: {text:  , foreground: ffa600ff, font: *nerdfont}
+                      - string: {text:  , foreground: ffffffff, font: *nerdfont}
+                      - string: {text:  , foreground: ffffffff, font: *nerdfont}
+                      - string: {text:  , foreground: ffffffff, font: *nerdfont}
+                      - string: {text:  , foreground: ffffffff, font: *nerdfont}
+                      - string: {text:  , foreground: ffffffff, font: *nerdfont}
+                      - string: {text:  , foreground: ffffffff, font: *nerdfont}
+                      - string: {text:  , foreground: ffffffff, font: *nerdfont}
+                      - string: {text:  , foreground: ffffffff, font: *nerdfont}
+                - string: {text: "{capacity}%"}
 
 
+EOF
+    echo "Yambar config file created succesfully"
+else
+    echo "Yambar config file already exists at $YAMBAR_CONF. Skipping creation."
+fi
+
+# Setup ~/.config/yambar/scripts/yambar-start.sh
+mkdir -p "$HOME/.config/yambar/scripts"
+YAMBAR_START="$HOME/.config/yambar/scripts/yambar-start.sh"
+if [ ! -f "$YAMBAR_START" ]; then
+    echo "Creating yambar-start script at $YAMBAR_START"
+    cat > "$YAMBAR_START" <<EOF
+#!/bin/bash
+
+killall yambar
+
+monitors=$(wlr-randr | grep "^[^ ]" | awk '{ print$1 }')
+total=$(wlr-randr | grep "^[^ ]" | awk '{ print$1 }' | wc -l)
+
+for monitor in ${monitors}; do
+	riverctl focus-output ${monitor}
+	yambar &
+	sleep 0.2
+done
+if [ "$total" -gt "1" ]; then
+	riverctl focus-output HDMI-A-1
+fi
+exit 0
+
+EOF
+    chmod +x "$YAMBAR_START" || { echo "Failed to set executable permission on yambar-start script."; exit 1; }
+    echo "Yambar-start script created succesfully"
+else
+    echo "Yambar-start script already exists at $YAMBAR_START. Skipping creation."
+fi
 
 ####################################################################################################################
 ####################################################################################################################
