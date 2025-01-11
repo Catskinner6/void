@@ -8,8 +8,6 @@ sudo xbps-install -Sy curl openssl
 
 # For Hyprland:
 curl -s https://raw.githubusercontent.com/Catskinner6/void/main/hyprVoid.sh | sh
-# For Gnome Desktop:
-curl -s https://raw.githubusercontent.com/Catskinner6/void/main/gnovoid.sh | sh
 ```
 
 Enjoy.
