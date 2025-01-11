@@ -73,6 +73,18 @@ riverctl map normal Super+Shift B spawn \$browser2
 # Toggle statusbar
 riverctl map normal Super+Shift R spawn "killall yambar || ~/.config/yambar/scripts/yambar-start.sh"
 
+
+
+# Set background and border color
+riverctl background-color 0x002b36
+riverctl border-color-focused 0x33ccff
+riverctl border-color-unfocused 0x595959
+
+# Set the default layout generator to be rivertile and start it.
+# River will send the process group of the init executable SIGTERM on exit.
+riverctl default-layout rivertile
+rivertile -view-padding 5 -outer-padding 5 -main-ratio 0.5 &
+
 EOF
     chmod +x "$RIVER_INIT" || { echo "Failed to set executable permission on river init file."; exit 1; }
     echo "River init file created succesfully"
@@ -356,6 +368,7 @@ fi
 
 ####################################################################################################################
 ####################################################################################################################
+echo "Script completed successfully!"
 
 # System Basics
 #sudo xbps-install -Sy git wget base-devel xtools stow nerd-fonts bash-completion || { echo "Package installation failed."; exit 1; }
