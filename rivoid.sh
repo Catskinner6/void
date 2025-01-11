@@ -46,6 +46,7 @@ getent group _seatd > /dev/null && sudo usermod -aG _seatd $USERNAME || echo "Gr
 
 
 # Setup ~/.config/river/init
+mkdir -p ~/.config/river/
 RIVER_INIT="~/.config/river/init"
 if [ ! -f "$RIVER_INIT" ]; then
     echo "Creating river init file at $RIVER_INIT"
