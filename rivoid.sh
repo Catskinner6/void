@@ -20,7 +20,7 @@ echo "Updating system..."
 sudo xbps-install -Syu || { echo "Failed to update system."; exit 1; }
 
 
-# Install base packages
+# Install base River Packages
 echo "Installing base packages..."
 # System Basics
 sudo xbps-install -Sy git wget base-devel xtools stow nerd-fonts bash-completion || { echo "Package installation failed."; exit 1; }
@@ -34,6 +34,10 @@ sudo xbps-install -Sy dbus avahi cups cronie elogind dunst polkit-gnome|| { echo
 sudo xbps-install -Sy alacritty foot fastfetch neovim zig go rust fzf zoxide starship btop himalaya zathura imv yazi mpv bat || { echo "Package installation failed."; exit 1; }
 # Audio and extras
 sudo xbps-install -Sy pipewire alsa-pipewire libjack-pipewire wireplumber libpulseaudio qutebrowser || { echo "Package installation failed."; exit 1; }
+
+
+# Add user to seatd group
+getent group _seatd > /dev/null && sudo usermod -aG _seatd $USERNAME || echo "Group _seatd does not exist. Skipping."
 
 
 # Install void repo
